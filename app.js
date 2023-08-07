@@ -52,13 +52,13 @@ mongoose
   app.post('/attendance', async (req, res) => {
     let studentAtt = await User.findOne({code:req.body.code});
     console.log(studentAtt)
-    // if(studentAtt){
-    //   const attendanceRecord = new Attendance({ userID:studentAtt._id , date: Date.now });
-    //    attendanceRecord.save()
-    //    .then((result)=>{
-    //     res.json(result)
-    //     console.log('result :>> ', result);
-    //    })
+    if(studentAtt){
+      const attendanceRecord = new Attendance({ userID:studentAtt._id });
+        attendanceRecord.save()
+        .then((result)=>{
+          res.json(result)
+          console.log('result :>> ', result);
+        })
 
-    // }
+    }
   })
