@@ -56,9 +56,37 @@ mongoose
       const attendanceRecord = new Attendance({ userID:studentAtt._id });
         attendanceRecord.save()
         .then((result)=>{
-          res.json(result)
+          // res.json(result)
           console.log('result :>> ', result);
+          res.redirect('/attendances')
         })
 
     }
+  })
+
+  app.get('/attendances', async(req, res) => {
+    const currentDate = new Date(); // Retrieve the current date
+    const currentDay = currentDate.getDate(); // Get the current day
+    const currentMonth = currentDate.getMonth(); // Get the current month
+    const currentYear = currentDate.getFullYear(); // Get the current year
+  
+    const startOfDay = new Date(currentYear, currentMonth, currentDay);
+    const endOfDay = new Date(currentYear, currentMonth, currentDay + 1);
+
+    // Find attendance records that fall within the current day
+    const attendance = await Attendance.find({
+      date: {
+        $gte: startOfDay,
+        $lt: endOfDay,
+      },
+    });
+    let studentList = []
+    let attDate =[]
+    for (let i=0  ; i<attendance.length; i++){
+      let studentWasRigst = await User.findById(attendance[i].userID)
+      studentList.push(studentWasRigst)
+      attDate.push(attendance[i].date)
+    }
+    console.log('studentList :>> ', studentList);
+    res.render('atts.ejs',{arrstudent:studentList,arrAttDate:attDate})
   })
