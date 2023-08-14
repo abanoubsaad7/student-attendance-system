@@ -25,12 +25,7 @@ const mongoose = require("mongoose");
 
 mongoose
   .connect(
-    "mongodb+srv://AbanoubSaad:dev@cluster0.yoqimye.mongodb.net/student_Attendance_System?retryWrites=true&w=majority"
-  ,{
-    useNewUrlParser: true,
-  useUnifiedTopology: true,
-  connectTimeoutMS: 5000 // Increase the timeout value (in milliseconds)
-  })
+    "mongodb+srv://AbanoubSaad:dev@cluster0.yoqimye.mongodb.net/student_Attendance_System?retryWrites=true&w=majority")
   .then((result) => {
     app.listen(process.env.PORT || port, () => {
       console.log(`Example app listening at http://localhost:${port}`);
@@ -75,6 +70,7 @@ mongoose
         .then((result)=>{
           // res.json(result)
           console.log('result :>> ', result);
+          req.session.studentAtt = studentAtt;
           res.redirect('/attendances')
         })
 
@@ -90,6 +86,7 @@ mongoose
     const startOfDay = new Date(currentYear, currentMonth, currentDay);
     const endOfDay = new Date(currentYear, currentMonth, currentDay + 1);
 
+    const studentAtt = req.session.studentAtt;
     // Find attendance records that fall within the current day
     const attendance = await Attendance.find({
       date: {
@@ -100,7 +97,7 @@ mongoose
     let studentList = []
     let attDate =[]
     for (let i=0  ; i<attendance.length; i++){
-      let studentWasRigst = await User.findById(attendance[i].userID)
+      let studentWasRigst = await User.find({_id:attendance[i].userID,level:studentAtt.level,groupType:studentAtt.groupType,dayOne:studentAtt.dayOne,dayTwo:studentAtt.dayTwo,startHour:studentAtt.startHour,endHour:studentAtt.endHour})
       studentList.push(studentWasRigst)
       attDate.push(attendance[i].date)
     }
@@ -145,6 +142,23 @@ mongoose
     res.render('reports',{arrstudent:studentList,arrAttDate:attDate})
   })
 
+  //update
   app.get('/main-update', (req, res) => {
     res.render('main-update')
+  })
+  app.get('/all-update', (req, res) => {
+    User.find().then((student)=>{
+      res.render('all-update',{arrstudent:student})
+    })
+  })
+  app.get('/update/:id', (req, res) => {
+    User.findById(req.params.id).then((student)=>{
+      console.log('student :>> ', student);
+      res.render('update-form',{objstudent:student})
+    })
+  })
+  app.post('/update/:id', function (req, res) {
+    User.findByIdAndUpdate(req.params.id,req.body).then((student)=>{
+      res.redirect('/main-update')
+    })
   })

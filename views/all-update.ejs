@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+  <%- include('partials/head') %>
+<body>
+  <div class="container">
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col">First Name</th>
+          <th scope="col">Last Name</th>
+          <th scope="col">code</th>
+          <th scope="col">level</th>
+          <th scope="col">update</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% arrstudent.forEach((item)=> { %>
+          <tr>
+            <td>
+              <%= item.fname %>
+            </td>
+            <td>
+              <%= item.lname %>
+            </td>
+            <td>
+              <%= item.code %>
+            </td>
+            <td>
+              <%= item.level %>
+            </td>
+            <td>
+              <a href="/update/<%= item._id %>" class="btn btn-primary" >Edit</a>
+            </td>
+          </tr>
+          <% }); %>
+      </tbody>
+    </table>
+  </div>
+  <div class="container">
+    <a href="index" class="btn btn-lg btn-dark">Back</a>
+  </div>
+</body>
+</html>

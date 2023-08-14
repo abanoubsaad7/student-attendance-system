@@ -2,17 +2,17 @@
 <html lang="en">
   <%- include('partials/head') %>
 <body>
-  <form action="/user" method="post">
+  <form action="/update/<%= objstudent._id %>" method="post">
     <label for="fname">First name</label>
-    <input type="text" id="fname" name="fname" placeholder="First name"><br><br>
+    <input type="text" id="fname" name="fname" placeholder="First name" value="<%= objstudent.fname %>"><br><br>
     <label for="lname">last name</label>
-    <input type="text" id="lname" name="lname" placeholder="last name"><br><br>
+    <input type="text" id="lname" name="lname" placeholder="last name" value="<%= objstudent.lname %>"><br><br>
     <label for="phone">phone</label>
-    <input type="text" name="phone" placeholder="phone"><br><br>
+    <input type="text" name="phone" placeholder="phone" value="<%= objstudent.phone %>"><br><br>
     <label for="level">level</label>
-    <input type="number" name="level" placeholder="level"><br><br>
+    <input type="number" name="level" placeholder="level" value="<%= objstudent.level %>"><br><br>
     <label for="code">Code</label>
-    <input type="text" name="code" placeholder="code"><br><br>
+    <input type="text" name="code" placeholder="code" value="<%= objstudent.code %>"><br><br>
     <label for="group">group type</label>
     <select name="groupType">
       <option value="عام">عام</option>
@@ -41,12 +41,12 @@
       <option value="saturday">saturday</option>
     </select> <br><br>
     <label>من</label>
-    <input type="text" name="startHour">
+    <input type="text" name="startHour" value="<%= objstudent.startHour %>">
     <label>إلى</label>
-    <input type="text" name="endHour">
+    <input type="text" name="endHour" value="<%= objstudent.endHour %>">
     <br><hr>
     
-    <input type="submit" value="save" class="btn btn-lg btn-dark">
+    <input type="submit" value="edit" class="btn btn-lg btn-dark">
   </form>
   <br><br>
   <div class="container">

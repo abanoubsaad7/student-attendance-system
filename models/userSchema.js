@@ -7,6 +7,11 @@ const userSchema = new Schema ({
     phone:String,
     level:Number,
     code:String,
+    groupType:String,
+    dayOne:String,
+    dayTwo:String,
+    startHour:String,
+    endHour:String
 });
 const User = mongoose.model("User",userSchema);
 

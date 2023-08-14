@@ -7,21 +7,54 @@
     <input type="date" name="day">
     <input type="submit" value="search" class="btn btn-lg btn-dark">
   </form>
+  <br><br>
   <div class="container">
     <table class="table">
       <thead>
         <tr>
-          <th scope="col">#</th>
           <th scope="col">First Name</th>
           <th scope="col">Last Name</th>
           <th scope="col">code</th>
+          <th scope="col">level</th>
+          <th scope="col">group type</th>
+          <th scope="col">days</th>
+          <th scope="col">hours</th>
           <th scope="col">Time</th>
+        </tr>
+        <tr>
+          <th></th>
+          <th></th>
+          <th></th>
+            <form>
+              <th>
+                <select id='levelFilter'>
+                  <option value="All">All</option>
+                  <option value="1">1</option>
+                  <option value="2">2</option>
+                  <option value="3">3</option>
+                </select>
+              </th>
+              <th>
+                <select id='groupTypeFilter'>
+                  <option value="All">All</option>
+                  <option value="عام">عام</option>
+                  <option value="خاص">خاص</option>
+                </select>
+              </th>
+              <th>
+                <input type="text" id="dayFilter" placeholder="days">
+              </th>
+              <th>
+                <input type="text" id="hoursFilter" placeholder="Hours">
+              </th>
+              
+            </form>
+          <th></th>
         </tr>
       </thead>
       <tbody>
         <% arrstudent.forEach((item,i)=> { %>
           <tr>
-            <th scope="row"> </th>
             <td>
               <%= item.fname %>
             </td>
@@ -30,6 +63,14 @@
             </td>
             <td>
               <%= item.code %>
+            </td>
+            <td><%= item.level %></td>
+            <td><%= item.groupType %></td>
+            <td>
+              <%= item.dayOne%> : <%= item.dayTwo %>
+            </td>
+            <td>
+              <%= item.startHour %> - <%= item.endHour %>
             </td>
             <td>
               <%= arrAttDate[i] %>
@@ -42,5 +83,41 @@
   <div class="container">
     <a href="index" class="btn btn-lg btn-dark">Back</a>
   </div>
+  <script>
+    const dayFilter = document.getElementById('dayFilter');
+    const hoursFilter = document.getElementById('hoursFilter');
+    const levelFilter = document.getElementById('levelFilter');
+    const groupTypeFilter = document.getElementById('groupTypeFilter');
+    const rows = document.querySelectorAll('tbody tr');
+
+    dayFilter.addEventListener('input', filterTable);
+    hoursFilter.addEventListener('input', filterTable);
+    levelFilter.addEventListener('change', filterTable);
+    groupTypeFilter.addEventListener('change', filterTable);
+
+    function filterTable() {
+      const dayValue = dayFilter.value.trim().toLowerCase();
+      const hoursValue = hoursFilter.value.trim().toLowerCase();
+      const levelValue = levelFilter.value;
+      const groupTypeValue = groupTypeFilter.value;
+
+      rows.forEach(row => {
+        const dayCell = row.querySelector('td:nth-child(6)');
+        const hoursCell = row.querySelector('td:nth-child(7)');
+        const levelCell = row.querySelector('td:nth-child(4)');
+        const groupTypeCell = row.querySelector('td:nth-child(5)');
+
+        const dayCellValue = dayCell.textContent.trim().toLowerCase();
+        const hoursCellValue = hoursCell.textContent.trim().toLowerCase();
+        const showRow =
+          (dayValue === '' || dayCellValue.includes(dayValue)) &&
+          (hoursValue === '' || hoursCellValue.includes(hoursValue)) &&
+          (levelValue === 'All' || levelCell.textContent === levelValue) &&
+          (groupTypeValue === 'All' || groupTypeCell.textContent === groupTypeValue);
+
+        row.style.display = showRow ? '' : 'none';
+      });
+    }
+  </script>
 </body>
 </html>
