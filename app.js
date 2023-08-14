@@ -121,7 +121,16 @@ mongoose
     let studentList = []
     let attDate =[]
     for (let i=0  ; i<attendance.length; i++){
-      let studentWasRigst = await User.findOne({_id:attendance[i].userID,level:studentAtt.level,groupType:studentAtt.groupType,dayOne:studentAtt.dayOne,dayTwo:studentAtt.dayTwo,startHour:studentAtt.startHour,endHour:studentAtt.endHour})
+      let studentWasRigst = await User.findOne({
+        _id:attendance[i].userID,
+        level:studentAtt.level,
+        groupType:studentAtt.groupType,
+        dayOne:studentAtt.dayOne,
+        dayTwo:studentAtt.dayTwo,
+        startHour:studentAtt.startHour,
+        endHour:studentAtt.endHour,
+        place:studentAtt.place
+      })
       if (studentWasRigst){
         studentList.push(studentWasRigst)
         attDate.push(attendance[i].date)

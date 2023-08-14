@@ -17,14 +17,15 @@
     <table class="table">
       <thead>
         <tr>
-          <th scope="col">First Name</th>
-          <th scope="col">Last Name</th>
-          <th scope="col">code</th>
-          <th scope="col">level</th>
-          <th scope="col">group type</th>
-          <th scope="col">days</th>
-          <th scope="col">hours</th>
-          <th scope="col">Time</th>
+          <th scope="col" style="text-align: center;">First Name</th>
+          <th scope="col" style="text-align: center;">Last Name</th>
+          <th scope="col" style="text-align: center;">code</th>
+          <th scope="col" style="text-align: center;">level</th>
+          <th scope="col" style="text-align: center;">group type</th>
+          <th scope="col" style="text-align: center;">days</th>
+          <th scope="col" style="text-align: center;">hours</th>
+          <th scope="col" style="text-align: center;">center name</th>
+          <th scope="col" style="text-align: center;">Time</th>
         </tr>
         <tr>
           <th></th>
@@ -52,6 +53,9 @@
               <th>
                 <input type="text" id="hoursFilter" placeholder="Hours">
               </th>
+              <th>
+                <input type="text" id="centerNameFilter" placeholder="Center's name">
+              </th>
               
             </form>
           <th></th>
@@ -78,6 +82,9 @@
               <%= item.startHour %> - <%= item.endHour %>
             </td>
             <td>
+              <%= item.place %>
+            </td>
+            <td>
               <%= arrAttDate[i] %>
             </td>
           </tr>
@@ -94,6 +101,9 @@
     const levelFilter = document.getElementById('levelFilter');
     const groupTypeFilter = document.getElementById('groupTypeFilter');
     const rows = document.querySelectorAll('tbody tr');
+    const centerNameFilter = document.getElementById('centerNameFilter');
+centerNameFilter.addEventListener('input', filterTable);
+
 
     dayFilter.addEventListener('input', filterTable);
     hoursFilter.addEventListener('input', filterTable);
@@ -101,28 +111,32 @@
     groupTypeFilter.addEventListener('change', filterTable);
 
     function filterTable() {
-      const dayValue = dayFilter.value.trim().toLowerCase();
-      const hoursValue = hoursFilter.value.trim().toLowerCase();
-      const levelValue = levelFilter.value;
-      const groupTypeValue = groupTypeFilter.value;
+  const dayValue = dayFilter.value.trim().toLowerCase();
+  const hoursValue = hoursFilter.value.trim().toLowerCase();
+  const levelValue = levelFilter.value;
+  const groupTypeValue = groupTypeFilter.value;
+  const centerNameValue = centerNameFilter.value.trim().toLowerCase();
 
-      rows.forEach(row => {
-        const dayCell = row.querySelector('td:nth-child(6)');
-        const hoursCell = row.querySelector('td:nth-child(7)');
-        const levelCell = row.querySelector('td:nth-child(4)');
-        const groupTypeCell = row.querySelector('td:nth-child(5)');
+  rows.forEach(row => {
+    const dayCell = row.querySelector('td:nth-child(6)');
+    const hoursCell = row.querySelector('td:nth-child(7)');
+    const levelCell = row.querySelector('td:nth-child(4)');
+    const groupTypeCell = row.querySelector('td:nth-child(5)');
+    const centerNameCell = row.querySelector('td:nth-child(8)'); // Adjust the column index as needed
 
-        const dayCellValue = dayCell.textContent.trim().toLowerCase();
-        const hoursCellValue = hoursCell.textContent.trim().toLowerCase();
-        const showRow =
-          (dayValue === '' || dayCellValue.includes(dayValue)) &&
-          (hoursValue === '' || hoursCellValue.includes(hoursValue)) &&
-          (levelValue === 'All' || levelCell.textContent === levelValue) &&
-          (groupTypeValue === 'All' || groupTypeCell.textContent === groupTypeValue);
+    const dayCellValue = dayCell.textContent.trim().toLowerCase();
+    const hoursCellValue = hoursCell.textContent.trim().toLowerCase();
+    const showRow =
+      (dayValue === '' || dayCellValue.includes(dayValue)) &&
+      (hoursValue === '' || hoursCellValue.includes(hoursValue)) &&
+      (levelValue === 'All' || levelCell.textContent === levelValue) &&
+      (groupTypeValue === 'All' || groupTypeCell.textContent === groupTypeValue) &&
+      (centerNameValue === '' || centerNameCell.textContent.toLowerCase().includes(centerNameValue));
 
-        row.style.display = showRow ? '' : 'none';
-      });
-    }
+    row.style.display = showRow ? '' : 'none';
+  });
+}
+
   </script>
   <script>
     const printButton = document.getElementById('printButton');

@@ -11,7 +11,8 @@ const userSchema = new Schema ({
     dayOne:String,
     dayTwo:String,
     startHour:String,
-    endHour:String
+    endHour:String,
+    place:String,
 });
 const User = mongoose.model("User",userSchema);
 
