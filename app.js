@@ -102,14 +102,14 @@ mongoose
     const studentAtt = req.session.studentAtt;
 
     // Retrieve students with similar properties
-    const similarStudents = await User.find({
-      level: studentAtt.level,
-      groupType: studentAtt.groupType,
-      dayOne: studentAtt.dayOne,
-      dayTwo: studentAtt.dayTwo,
-      startHour: studentAtt.startHour,
-      endHour: studentAtt.endHour,
-    });
+    // const similarStudents = await User.find({
+    //   level: studentAtt.level,
+    //   groupType: studentAtt.groupType,
+    //   dayOne: studentAtt.dayOne,
+    //   dayTwo: studentAtt.dayTwo,
+    //   startHour: studentAtt.startHour,
+    //   endHour: studentAtt.endHour,
+    // });
 
     // Find attendance records that fall within the current day
     const attendance = await Attendance.find({
@@ -128,7 +128,7 @@ mongoose
       }
     }
     console.log('studentList :>> ', studentList);
-    res.render('atts',{objstudent:studentList,arrAttDate:attDate,arrSimilarStudents:similarStudents})
+    res.render('atts',{objstudent:studentList,arrAttDate:attDate})
   })
 
   // reports
