@@ -19,7 +19,24 @@
           </tr>
         </thead>
         <tbody>
-          <% arrstudent.forEach((item,i)=> { %>
+            <% objstudent.forEach((currentItem,j) => { %>
+            <tr>
+              <th scope="row"> </th>
+              <td>
+                <%= currentItem.fname %>
+              </td>
+              <td>
+                <%= currentItem.lname %>
+              </td>
+              <td>
+                <%= currentItem.code %>
+              </td>
+              <td>
+                <%= arrAttDate[j] %>
+              </td>
+            </tr>  
+            <% }); %>
+          <% arrSimilarStudents.forEach((item,i)=> { %>
             <tr>
               <th scope="row"> </th>
               <td>

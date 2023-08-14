@@ -7,7 +7,12 @@
     <input type="date" name="day">
     <input type="submit" value="search" class="btn btn-lg btn-dark">
   </form>
+  <div class="container">
+    <button id="printButton" class="btn btn-lg btn-primary">Print Table</button>
+  </div>
+  
   <br><br>
+
   <div class="container">
     <table class="table">
       <thead>
@@ -119,5 +124,13 @@
       });
     }
   </script>
+  <script>
+    const printButton = document.getElementById('printButton');
+  
+    printButton.addEventListener('click', () => {
+      window.print();
+    });
+  </script>
+  
 </body>
 </html>

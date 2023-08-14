@@ -1,0 +1,7 @@
+/* Define styles for printing */
+@media print {
+  /* Hide unnecessary elements */
+  #printButton {
+    display: none;
+  }
+}

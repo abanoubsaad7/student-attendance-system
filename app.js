@@ -62,18 +62,31 @@ mongoose
   })
 
   app.post('/attendance', async (req, res) => {
+    const currentDate = new Date(); // Retrieve the current date
+    const currentDay = currentDate.getDate(); // Get the current day
+    const currentMonth = currentDate.getMonth(); // Get the current month
+    const currentYear = currentDate.getFullYear(); // Get the current year
+  
+    const startOfDay = new Date(currentYear, currentMonth, currentDay);
+    const endOfDay = new Date(currentYear, currentMonth, currentDay + 1);
+
     let studentAtt = await User.findOne({code:req.body.code});
     console.log(studentAtt)
-    if(studentAtt){
-      const attendanceRecord = new Attendance({ userID:studentAtt._id });
-        attendanceRecord.save()
-        .then((result)=>{
-          // res.json(result)
-          console.log('result :>> ', result);
-          req.session.studentAtt = studentAtt;
-          res.redirect('/attendances')
-        })
-
+    if (studentAtt) {
+      // Check if the student's attendance for today already exists
+      const existingAttendance = await Attendance.findOne({
+        userID: studentAtt._id,
+        date: { $gte: startOfDay, $lt: endOfDay },
+      });
+      if (!existingAttendance) {
+        const attendanceRecord = new Attendance({ userID: studentAtt._id });
+        await attendanceRecord.save();
+        req.session.studentAtt = studentAtt;
+        res.redirect('/attendances');
+      } else {
+        // Attendance already recorded for this student
+        res.send('Attendance already recorded for this student today.');
+      }
     }
   })
 
@@ -87,6 +100,17 @@ mongoose
     const endOfDay = new Date(currentYear, currentMonth, currentDay + 1);
 
     const studentAtt = req.session.studentAtt;
+
+    // Retrieve students with similar properties
+    const similarStudents = await User.find({
+      level: studentAtt.level,
+      groupType: studentAtt.groupType,
+      dayOne: studentAtt.dayOne,
+      dayTwo: studentAtt.dayTwo,
+      startHour: studentAtt.startHour,
+      endHour: studentAtt.endHour,
+    });
+
     // Find attendance records that fall within the current day
     const attendance = await Attendance.find({
       date: {
@@ -97,12 +121,14 @@ mongoose
     let studentList = []
     let attDate =[]
     for (let i=0  ; i<attendance.length; i++){
-      let studentWasRigst = await User.find({_id:attendance[i].userID,level:studentAtt.level,groupType:studentAtt.groupType,dayOne:studentAtt.dayOne,dayTwo:studentAtt.dayTwo,startHour:studentAtt.startHour,endHour:studentAtt.endHour})
-      studentList.push(studentWasRigst)
-      attDate.push(attendance[i].date)
+      let studentWasRigst = await User.findOne({_id:attendance[i].userID,level:studentAtt.level,groupType:studentAtt.groupType,dayOne:studentAtt.dayOne,dayTwo:studentAtt.dayTwo,startHour:studentAtt.startHour,endHour:studentAtt.endHour})
+      if (studentWasRigst){
+        studentList.push(studentWasRigst)
+        attDate.push(attendance[i].date)
+      }
     }
     console.log('studentList :>> ', studentList);
-    res.render('atts',{arrstudent:studentList,arrAttDate:attDate})
+    res.render('atts',{objstudent:studentList,arrAttDate:attDate,arrSimilarStudents:similarStudents})
   })
 
   // reports
@@ -139,6 +165,7 @@ mongoose
     }
     console.log('studentList :>> ', studentList);
     console.log('attDate :>> ', attDate);
+    
     res.render('reports',{arrstudent:studentList,arrAttDate:attDate})
   })
 
