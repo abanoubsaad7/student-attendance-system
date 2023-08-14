@@ -1,0 +1,42 @@
+body{
+  width: 100%;
+  height: 600px;
+  direction: rtl;
+  padding: 2%;
+  background-image: linear-gradient(to bottom right, #EFEFEF, #FFFAE7); 
+  background-size: cover; 
+}
+input{
+  height: 2.5vw;
+  text-align: center;
+}
+#main-page{
+  padding: 3% 5%;
+  margin: auto;
+}
+#main{
+  padding: 0.5%;
+  background-image: linear-gradient(to bottom right, #EFEFEF, #FFFAE7); 
+  background-size: cover; 
+}
+.earth{
+  width:70%;
+  height: 600px;
+  display: flex;
+  transform-style: preserve-3d;
+  transform: rotateY(-10deg);
+  position: relative;
+  animation:earth 4s infinite both;
+}
+@keyframes earth {
+  0%{ bottom: 0px;}
+  50%{ bottom: 50px; }
+  100%{bottom: 0px;}
+}
+
+hr{
+  width: 60%;
+}
+::-webkit-input-placeholder{
+  text-align: center;
+}

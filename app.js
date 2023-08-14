@@ -2,6 +2,15 @@ const express = require('express')
 const app = express()
 const port = 2000
 
+//session set up
+const session = require('express-session');
+
+app.use(session({
+  secret: 'your-secret-key',
+  resave: false,
+  saveUninitialized: true
+}));
+
 app.set("view engine", "ejs");
 app.use(express.static("public"));
 app.use(express.urlencoded({ extended: true }));
@@ -33,7 +42,14 @@ mongoose
   });
 
   app.get('/', (req, res) => {
-    res.render('index.ejs')
+    res.render('index')
+  })
+  app.get('/index', (req, res) => {
+    res.redirect('/')
+  })
+
+  app.get('/add-student', (req, res) => {
+    res.render('add-student')
   })
 
   app.post('/user', function (req, res) {
@@ -41,12 +57,13 @@ mongoose
 
     newuser.save()
     .then((result)=>{
-      res.json(result)
+      res.redirect('/add-student')
     })
   })
 
+  //attendance regist
   app.get('/attendance', (req, res) => {
-    res.render('att.ejs')
+    res.render('att')
   })
 
   app.post('/attendance', async (req, res) => {
@@ -88,5 +105,46 @@ mongoose
       attDate.push(attendance[i].date)
     }
     console.log('studentList :>> ', studentList);
-    res.render('atts.ejs',{arrstudent:studentList,arrAttDate:attDate})
+    res.render('atts',{arrstudent:studentList,arrAttDate:attDate})
+  })
+
+  // reports
+  app.get('/report', (req, res) => {
+    res.render('report')
+  })
+
+  app.post('/report', async (req, res)=> {
+    let selectedDate = new Date(req.body.day)
+    let selectedDay =selectedDate.getDate();
+    let selectedMonth = selectedDate.getMonth();
+    let selectedYear = selectedDate.getFullYear();
+
+    const startOfDay = new Date(selectedYear, selectedMonth, selectedDay);
+    const endOfDay = new Date(selectedYear, selectedMonth, selectedDay + 1);
+
+    let attendance = await Attendance.find({date:{
+      $gte:startOfDay,
+      $lt:endOfDay
+    }})
+    console.log('attendance :>> ', attendance);
+    req.session.attendance = attendance; // Store the attendance data in the session
+    res.redirect('/reports')
+  })
+
+  app.get('/reports', async(req, res) => {
+    const attendance = req.session.attendance; // Retrieve the attendance data from the session
+    let studentList = []
+    let attDate =[]
+    for (let i=0  ; i<attendance.length; i++){
+      let studentWasRigst = await User.findById(attendance[i].userID)
+      studentList.push(studentWasRigst)
+      attDate.push(attendance[i].date)
+    }
+    console.log('studentList :>> ', studentList);
+    console.log('attDate :>> ', attDate);
+    res.render('reports',{arrstudent:studentList,arrAttDate:attDate})
+  })
+
+  app.get('/main-update', (req, res) => {
+    res.render('main-update')
   })

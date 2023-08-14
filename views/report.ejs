@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+  <%- include('partials/head') %>
+  
+<body>
+  <form action="/report" method="post">
+    <input type="date" name="day">
+    <input type="submit" value="search" class="btn btn-lg btn-dark">
+  </form>
+  <div class="row">
+    <h1>
+      لا يوجد تسجيل حتى الان
+    </h1>
+    <table class="table col-lg-6">
+      <thead>
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">First Name</th>
+          <th scope="col">Last Name</th>
+          <th scope="col">code</th>
+        </tr>
+      </thead>
+    </table>
+  </div>
+  <div class="container">
+    <a href="index" class="btn btn-lg btn-dark">Back</a>
+  </div>
+</body>
+</html>
