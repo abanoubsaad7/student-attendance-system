@@ -140,7 +140,7 @@ mongoose
     res.render('atts',{objstudent:studentList,arrAttDate:attDate})
   })
 
-  // reports
+  //attendance reports
   app.get('/report', (req, res) => {
     res.render('report')
   })
@@ -187,14 +187,102 @@ mongoose
       res.render('all-update',{arrstudent:student})
     })
   })
-  app.get('/update/:id', (req, res) => {
-    User.findById(req.params.id).then((student)=>{
-      console.log('student :>> ', student);
-      res.render('update-form',{objstudent:student})
+
+  app.get('/update-one', (req, res) => {
+    User.find({level:1}).then((student)=>{
+      res.render('one-update',{arrstudent:student})
     })
   })
+
+app.get('/update-two', (req, res) => {
+  User.find({level:2}).then((student)=>{
+    res.render('two-update',{arrstudent:student})
+  })
+})
+
+app.get('/update-three', (req, res) => {
+  User.find({level:3}).then((student)=>{
+    res.render('three-update',{arrstudent:student})
+  })
+})
+
+  app.get('/update/:id', (req, res) => {
+    User.findById(req.params.id).then((result)=>{
+      console.log('student :>> ', result);
+      res.render('update-form',{objstudent:result})
+    })
+    .catch((err)=>{
+      console.log('err :>> ', err);
+    })
+  })
+
   app.post('/update/:id', function (req, res) {
-    User.findByIdAndUpdate(req.params.id,req.body).then((student)=>{
+    User.findByIdAndUpdate(req.params.id,req.body).then((result)=>{
       res.redirect('/main-update')
+    })
+  })
+
+  //delete requests
+  app.get('/main-delete',(req,res)=>{
+    res.render("main-delete")
+  })
+
+  app.get('/all-delete', (req, res) => {
+    User.find().then((student)=>{
+      res.render('all-delete',{arrstudent:student});
+    })
+  })
+
+  app.get('/delete-one', (req, res) => {
+    User.find({level: 1 }).then ((student)=> {
+      res.render ('one-delete' , { arrstudent: student });
+    })
+  })
+
+  app.get('/delete-two', (req, res) => {
+    User.find({level: 2 }).then ((student)=> {
+      res.render ('two-delete' , { arrstudent: student });
+    })
+  })
+
+  app.get('/delete-three', (req, res) => {
+    User.find({level: 3 }).then ((student)=> {
+      res.render ('three-delete' , { arrstudent: student });
+    })
+  })
+
+
+  app.get('/delete/:id', (req, res) => {
+    User.findById(req.params.id).then((result)=>{
+      console.log('student :>> ', result);
+      res.render('delete-confirm',{objStudent:result})
+    })
+    .catch((err)=>{
+      console.log('err :>> ', err);
+    })
+  })
+
+  app.delete('/delete/:id', function(req, res) {
+    let studentID = req.params.id;
+    User.findByIdAndDelete(studentID).then((student)=>{
+      Attendance.deleteMany({userID:studentID}).then((result)=>{
+        res.json({ myLink: "/main-delete" })
+      })
+    })
+  });
+
+  //student reports
+  app.get('/all-student-report', (req, res) => {
+    User.find().then((allStudents)=>{
+      res.render('all-student-report',{arrstudent:allStudents})
+    })
+  })
+
+  app.get('/all-student-report/:studentID', (req, res) => {
+    let studentID = req.params.studentID;
+    User.findById(studentID).then((student)=>{
+      Attendance.find({userID:studentID}).then((allAttendance)=>{
+        res.render('student-report',{objstudent:student,arrAllAttendance:allAttendance})
+      })
     })
   })

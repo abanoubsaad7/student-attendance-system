@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+  <%- include('partials/head') %>
+<body>
+  <div class="container">
+    <button id="printButton" class="btn btn-lg btn-primary">Print student report</button>
+  </div>
+  <section>
+    <h1>
+      تقرير الطالب <%= objstudent.fname %> <%= objstudent.lname %>
+    </h1>
+    <div class="row">
+      <div class="col-lg-3">
+        <h4>
+          رقم التليفون
+        </h4>
+      </div>
+      <div class="col-lg-3">
+        <h4>
+          <%= objstudent.phone %>
+        </h4>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-lg-3">
+        <h4>
+          السنة الدراسية
+        </h4>
+      </div>
+      <div class="col-lg-3">
+        <h4>
+          <%= objstudent.level %>
+        </h4>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-lg-3">
+        <h4>
+          نوع المجموعة
+        </h4>
+      </div>
+      <div class="col-lg-3">
+        <h4>
+          <%= objstudent.groupType %>
+        </h4>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-lg-3">
+        <h4>
+          اسم السنتر
+        </h4>
+      </div>
+      <div class="col-lg-3">
+        <h4>
+          <%= objstudent.place %>
+        </h4>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-lg-3">
+        <h4>
+          مجموعة يوم 
+        </h4>
+      </div>
+      <div class="col-lg-3">
+        <h4>
+          <%= objstudent.dayOne %> , <%= objstudent.dayTwo %>
+        </h4>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-lg-3">
+        <h4>
+          الساعة
+        </h4>
+      </div>
+      <div class="col-lg-3">
+        <h4>
+          من <%= objstudent.startHour %> الي <%= objstudent.endHour %>
+        </h4>
+      </div>
+    </div>
+  </section>
+  <section>
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col">
+            تسجيلات حضوره
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <% arrAllAttendance.forEach(item => { %>
+          <tr>
+            <td><%= item.date %></td>
+          </tr>
+        <%  }); %>
+      </tbody>
+    </table>
+  </section>
+  <script>
+    const printButton = document.getElementById('printButton');
+  
+    printButton.addEventListener('click', () => {
+      window.print();
+    });
+  </script>
+</body>
+</html>

@@ -10,7 +10,7 @@
           <th scope="col">Last Name</th>
           <th scope="col">code</th>
           <th scope="col">level</th>
-          <th scope="col">update</th>
+          <th scope="col">delete</th>
         </tr>
       </thead>
       <tbody>
@@ -29,7 +29,7 @@
               <%= item.level %>
             </td>
             <td>
-              <a href="/update/<%= item._id %>" class="btn btn-primary" >Edit</a>
+              <a href="/delete/<%= item._id %>" class="btn btn-danger" >delete</a>
             </td>
           </tr>
           <% }); %>
@@ -37,7 +37,7 @@
     </table>
   </div>
   <div class="container">
-    <a href="main-update" class="btn btn-lg btn-dark">Back</a>
+    <a href="main-delete" class="btn btn-lg btn-dark">Back</a>
   </div>
 </body>
 </html>

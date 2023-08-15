@@ -37,6 +37,6 @@ input{
 hr{
   width: 60%;
 }
-::-webkit-input-placeholder,td{
+::-webkit-input-placeholder,td,thead{
   text-align: center;
 }

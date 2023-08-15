@@ -15,11 +15,13 @@
     <input type="text" name="code" placeholder="code" value="<%= objstudent.code %>"><br><br>
     <label for="group">group type</label>
     <select name="groupType">
+      <option value="<%= objstudent.groupType %>"><%= objstudent.groupType %></option>
       <option value="عام">عام</option>
       <option value="خاص">خاص</option>
     </select><br><br>
     <label> اليوم الاول </label>
     <select name="dayOne">
+      <option value="<%= objstudent.dayOne %>"><%= objstudent.dayOne %></option>
       <option value="select">--select--</option>
       <option value="sunday">sunday</option>
       <option value="monday">monday</option>
@@ -31,6 +33,7 @@
     </select>
     <label> اليوم الثاني </label>
     <select name="dayTwo">
+      <option value="<%= objstudent.dayTwo %>"><%= objstudent.dayTwo %></option>
       <option value="select">--select--</option>
       <option value="sunday">sunday</option>
       <option value="monday">monday</option>
@@ -44,6 +47,9 @@
     <input type="text" name="startHour" value="<%= objstudent.startHour %>">
     <label>إلى</label>
     <input type="text" name="endHour" value="<%= objstudent.endHour %>">
+    <br><br>
+    <label>اسم السنتر</label>
+    <input type="text" name="place" value="<%= objstudent.place %>">
     <br><hr>
     
     <input type="submit" value="edit" class="btn btn-lg btn-dark">
