@@ -266,7 +266,12 @@ app.get('/update-three', (req, res) => {
     let studentID = req.params.id;
     User.findByIdAndDelete(studentID).then((student)=>{
       Attendance.deleteMany({userID:studentID}).then((result)=>{
-        res.json({ myLink: "/main-delete" })
+         Pay.deleteMany({studentID:studentID}).then((payed)=>{
+   Exam.deleteMany({studentID:studentID}).then((exams)=>{
+res.json({ myLink: "/main-delete" })
+})
+})
+        
       })
     })
   });
