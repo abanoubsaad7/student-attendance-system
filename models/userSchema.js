@@ -6,7 +6,10 @@ const userSchema = new Schema ({
     lname:String,
     phone:String,
     level:Number,
-    code:String,
+    code:{
+      type:String,
+      unique : true
+    },
     groupType:String,
     dayOne:String,
     dayTwo:String,

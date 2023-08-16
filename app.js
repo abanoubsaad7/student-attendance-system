@@ -18,8 +18,12 @@ app.use(express.urlencoded({ extended: true }));
 //models
 const User = require('./models/userSchema');
 const Attendance = require('./models/attSchema');
+const Pay = require('./models/paySchema');
+const Exam = require('./models/examSchema');
 //database set up
 const mongoose = require("mongoose");
+
+
 
 
 
@@ -37,10 +41,16 @@ mongoose
   });
 
   app.get('/', (req, res) => {
-    res.render('index')
+    res.render('index1')
+  })
+  //login page
+  app.post('/admin', function (req, res) {
+    if (req.body.pass ==='1234'){
+      res.redirect('/index')
+    }
   })
   app.get('/index', (req, res) => {
-    res.redirect('/')
+    res.render('index')
   })
 
   app.get('/add-student', (req, res) => {
@@ -100,16 +110,6 @@ mongoose
     const endOfDay = new Date(currentYear, currentMonth, currentDay + 1);
 
     const studentAtt = req.session.studentAtt;
-
-    // Retrieve students with similar properties
-    // const similarStudents = await User.find({
-    //   level: studentAtt.level,
-    //   groupType: studentAtt.groupType,
-    //   dayOne: studentAtt.dayOne,
-    //   dayTwo: studentAtt.dayTwo,
-    //   startHour: studentAtt.startHour,
-    //   endHour: studentAtt.endHour,
-    // });
 
     // Find attendance records that fall within the current day
     const attendance = await Attendance.find({
@@ -278,11 +278,152 @@ app.get('/update-three', (req, res) => {
     })
   })
 
+  // app.get('/all-student-report/:studentID', (req, res) => {
+  //   let studentID = req.params.studentID;
+  //   User.findById(studentID).then((student)=>{
+  //     Attendance.find({userID:studentID}).then((allAttendance)=>{
+  //       Exam.find({studentID:studentID}).then((allExams)=>{
+  //         res.render('student-report',{objstudent:student,arrAllAttendance:allAttendance,arrAllExams:allExams})
+  //       })
+  //     })
+  //   })
+  // })
+
   app.get('/all-student-report/:studentID', (req, res) => {
     let studentID = req.params.studentID;
-    User.findById(studentID).then((student)=>{
-      Attendance.find({userID:studentID}).then((allAttendance)=>{
-        res.render('student-report',{objstudent:student,arrAllAttendance:allAttendance})
+    User.findById(studentID)
+      .then((student) => {
+        Attendance.find({ userID: studentID })
+          .then((allAttendance) => {
+            Exam.find({ studentID: studentID })
+              .then((allExams) => {
+                res.render('student-report', {
+                  objstudent: student,
+                  arrAllAttendance: allAttendance,
+                  arrAllExams: allExams,
+                });
+              })
+              .catch((examError) => {
+                console.error('Error retrieving exams:', examError);
+                res.render('student-report', {
+                  objstudent: student,
+                  arrAllAttendance: allAttendance,
+                  arrAllExams: [],
+                });
+              });
+          })
+          .catch((attendanceError) => {
+            console.error('Error retrieving attendance:', attendanceError);
+            res.render('student-report', {
+              objstudent: student,
+              arrAllAttendance: [],
+              arrAllExams: [],
+            });
+          });
       })
+      .catch((studentError) => {
+        console.error('Error retrieving student:', studentError);
+        res.render('student-report', {
+          objstudent: null,
+          arrAllAttendance: [],
+          arrAllExams: [],
+        });
+      });
+  });
+
+  //Student Pay for month
+
+  app.get('/main-pay', (req, res) => {
+    res.render('main-pay')
+  })
+
+  app.get('/pay', (req, res) => {
+    res.render("pay");
+  })
+
+  app.post('/pay', async (req, res)=> {
+    let studentPay = await User.findOne({code:req.body.code});
+    if(studentPay){
+      const payed = new Pay({
+        studentID:studentPay._id,
+        mon:req.body.mon,
+        isPay: true
+      })
+      payed.save().then((result)=>{
+        res.redirect("/pay")
+      })
+    }
+  })
+
+  //pay report
+  app.get('/pay-report', (req, res) => {
+    res.render('pay-report')
+  })
+
+  app.post('/pay-report', async(req, res) => {
+    let selectedMonth = req.body.mon;
+
+    let studentsPayBySelectedMonth = await Pay.find({mon:selectedMonth})
+    req.session.studentsPayBySelectedMonth = studentsPayBySelectedMonth;
+    res.redirect('/pay-reports')
+  })
+
+  app.get('/pay-reports', async(req, res) => {
+    const studentsPayBySelectedMonth = req.session.studentsPayBySelectedMonth
+    let studentList = []
+    for(let i=0; i<studentsPayBySelectedMonth.length; i++){
+      let studentWasPayed = await User.findById(studentsPayBySelectedMonth[i].studentID);
+      studentList.push(studentWasPayed)
+      
+    }
+    
+    console.log('studentList :>> ', studentList);
+    console.log('studentsPayBySelectedMonth :>> ', studentsPayBySelectedMonth);
+    res.render('pay-reports' ,{arrstudent:studentList,payList:studentsPayBySelectedMonth} )
+  })
+
+  //exams
+  app.get('/main-exam', (req, res) => {
+    res.render('main-exam')
+  })
+  app.get('/all-studentlist-for-exam', (req, res) => {
+    User.find().then((students)=>{
+      res.render('studentList-Exam', {arrstudent:students });
+    })
+  })
+
+  app.get('/exam-one', (req, res) => {
+    User.find({level: 1 }).then ((student)=> {
+      res.render ('one-exam' , { arrstudent: student });
+    })
+  })
+
+  app.get('/exam-two', (req, res) => {
+    User.find({level: 2 }).then ((student)=> {
+      res.render ('two-exam' , { arrstudent: student });
+    })
+  })
+
+  app.get('/exam-three', (req, res) => {
+    User.find({level: 3 }).then ((student)=> {
+      res.render ('three-exam' , { arrstudent: student });
+    })
+  })
+
+
+  app.get('/all-studentlist-for-exam/:studentID', (req, res) => {
+    User.findById(req.params.studentID).then((student)=>{
+      res.render('add-exam',{objstudent:student})
+    })
+  })
+
+  app.post('/all-studentlist-for-exam/:studentID', async (req, res) => {
+    const newExam = new Exam({
+      studentID:req.params.studentID,
+      examName:req.body.examName,
+      degree:req.body.degree
+    })
+    newExam.save().then((studentExam)=>{
+      res.redirect('/main-exam')
     })
   })

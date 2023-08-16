@@ -11,7 +11,7 @@
           <th scope="col">Last Name</th>
           <th scope="col">code</th>
           <th scope="col">level</th>
-          <th scope="col">delete</th>
+          <th scope="col">add exam</th>
         </tr>
       </thead>
       <tbody>
@@ -30,7 +30,7 @@
               <%= item.level %>
             </td>
             <td>
-              <a href="/delete/<%= item._id %>" class="btn btn-danger" >delete</a>
+              <a href="/all-studentlist-for-exam/<%= item._id %>" class="btn btn-primary" >add exam for this student</a>
             </td>
           </tr>
           <% }); %>
@@ -38,7 +38,7 @@
     </table>
   </div>
   <div class="container">
-    <a href="main-delete" class="btn btn-lg btn-dark">Back</a>
+    <a href="main-exam" class="btn btn-lg btn-dark">Back</a>
   </div>
   <script>
     const filterInput = document.getElementById('filterInput');

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+  <%- include('partials/head') %>
+  
+<body>
+  <form action="/pay-report" method="post">
+    <label>حدد الشهر من فضلك</label>
+          <select name="mon" >
+            <option>--select--</option>
+            <option value="يناير">يناير</option>
+            <option value="فبراير">فبراير</option>
+            <option value="مارس">مارس</option>
+            <option value="ابريل">ابريل</option>
+            <option value="مايو">مايو</option>
+            <option value="يونيو">يونيو</option>
+            <option value="يوليو">يوليو</option>
+            <option value="اغسطس">اغسطس</option>
+            <option value="سبتمبر">سبتمبر</option>
+            <option value="اكتوبر">اكتوبر</option>
+            <option value="نوفمبر">نوفمبر</option>
+            <option value="ديسمبر">ديسمبر</option>
+          </select>
+    <input type="submit" value="search" class="btn btn-lg btn-dark">
+  </form>
+  <div class="row">
+    <h1>
+      لا يوجد تسجيل حتى الان
+    </h1>
+    <table class="table col-lg-6">
+      <thead>
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">First Name</th>
+          <th scope="col">Last Name</th>
+          <th scope="col">code</th>
+        </tr>
+      </thead>
+    </table>
+  </div>
+  <div class="container">
+    <a href="index" class="btn btn-lg btn-dark">Back</a>
+  </div>
+</body>
+</html>

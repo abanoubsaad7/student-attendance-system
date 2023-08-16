@@ -3,8 +3,23 @@
   <%- include('partials/head') %>
   
 <body>
-  <form action="/report" method="post">
-    <input type="date" name="day">
+  <form action="/pay-report" method="post">
+    <label>حدد الشهر من فضلك</label>
+          <select name="mon" >
+            <option>--select--</option>
+            <option value="يناير">يناير</option>
+            <option value="فبراير">فبراير</option>
+            <option value="مارس">مارس</option>
+            <option value="ابريل">ابريل</option>
+            <option value="مايو">مايو</option>
+            <option value="يونيو">يونيو</option>
+            <option value="يوليو">يوليو</option>
+            <option value="اغسطس">اغسطس</option>
+            <option value="سبتمبر">سبتمبر</option>
+            <option value="اكتوبر">اكتوبر</option>
+            <option value="نوفمبر">نوفمبر</option>
+            <option value="ديسمبر">ديسمبر</option>
+          </select>
     <input type="submit" value="search" class="btn btn-lg btn-dark">
   </form>
   <div class="container">
@@ -13,7 +28,7 @@
   
   <br><br>
   <h1>
-    التقرير اليومي  
+    التقرير الشهري للدفع  
   </h1>
   <div class="container">
     <table class="table">
@@ -27,7 +42,8 @@
           <th scope="col" style="text-align: center;">days</th>
           <th scope="col" style="text-align: center;">hours</th>
           <th scope="col" style="text-align: center;">center name</th>
-          <th scope="col" style="text-align: center;">Time</th>
+          <th scope="col" style="text-align: center;">month</th>
+          <th scope="col" style="text-align: center;">payed</th>
         </tr>
         <tr>
           <th></th>
@@ -58,6 +74,9 @@
               <th>
                 <input type="text" id="centerNameFilter" placeholder="Center's name">
               </th>
+              <th>
+                
+              </th>
               
             </form>
           <th></th>
@@ -87,7 +106,10 @@
               <%= item.place %>
             </td>
             <td>
-              <%= arrAttDate[i] %>
+              <%= payList[i].mon %>
+            </td>
+            <td>
+              <%= payList[i].isPay %>
             </td>
           </tr>
           <% }); %>
@@ -95,7 +117,7 @@
     </table>
   </div>
   <div class="container">
-    <a href="index" class="btn btn-lg btn-dark">Back</a>
+    <a href="main-pay" class="btn btn-lg btn-dark">Back</a>
   </div>
   <script>
     const dayFilter = document.getElementById('dayFilter');

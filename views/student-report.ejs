@@ -99,6 +99,22 @@
         <%  }); %>
       </tbody>
     </table>
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col">الامتحان</th>
+          <th scope="col">الدرجة</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% arrAllExams.forEach(currentItem => { %>
+          <tr>
+            <td><%= currentItem.examName %></td>
+            <td><%= currentItem.degree %></td>
+          </tr>
+        <%  }); %>
+      </tbody>
+    </table>
   </section>
   <script>
     const printButton = document.getElementById('printButton');

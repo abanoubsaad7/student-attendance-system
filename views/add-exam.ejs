@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include('partials/head') %>
+
+  <body>
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-5">
+          <form action="/all-studentlist-for-exam/<%= objstudent._id %>" method="post">
+            <label>اسم الامتحان</label>
+            <input type="text" name="examName">
+            <br><br>
+            <label>الدرجة</label>
+            <input type="number" name="degree">
+            <br><br>
+            <input type="submit" value="save" class="btn btn-lg btn-dark">
+          </form>
+        </div>
+        <div class="col-lg-7">
+          <img src="/img/Picsart_23-08-10_20-07-19-058.png" alt="..." class="earth">
+        </div>
+      </div>
+
+    </div>
+  </body>
+
+</html>

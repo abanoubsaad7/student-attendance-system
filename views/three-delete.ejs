@@ -3,6 +3,7 @@
   <%- include('partials/head') %>
 <body>
   <div class="container">
+    <input type="text" id="filterInput" placeholder="Filter by name">
     <table class="table">
       <thead>
         <tr>
@@ -39,5 +40,23 @@
   <div class="container">
     <a href="main-delete" class="btn btn-lg btn-dark">Back</a>
   </div>
+  <script>
+    const filterInput = document.getElementById('filterInput');
+    const tableRows = document.querySelectorAll('tbody tr');
+
+    filterInput.addEventListener('input', () => {
+      const filterValue = filterInput.value.toLowerCase();
+      tableRows.forEach((row) => {
+        const firstName = row.cells[0].textContent.toLowerCase();
+        const lastName = row.cells[1].textContent.toLowerCase();
+
+        if (firstName.includes(filterValue) || lastName.includes(filterValue)) {
+          row.style.display = '';
+        } else {
+          row.style.display = 'none';
+        }
+      });
+    });
+  </script>
 </body>
 </html>

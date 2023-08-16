@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include('partials/head') %>
+<body>
+  <section>
+    <div class="row">
+      <div class="col-lg-5">
+        <form action="/pay" method="post" >
+          <input type="text" name="code" placeholder="code"class="col-lg-3">
+          <br><br>
+          <label>تحديد الشهر</label>
+          <select name="mon" >
+            <option value="يناير">يناير</option>
+            <option value="فبراير">فبراير</option>
+            <option value="مارس">مارس</option>
+            <option value="ابريل">ابريل</option>
+            <option value="مايو">مايو</option>
+            <option value="يونيو">يونيو</option>
+            <option value="يوليو">يوليو</option>
+            <option value="اغسطس">اغسطس</option>
+            <option value="سبتمبر">سبتمبر</option>
+            <option value="اكتوبر">اكتوبر</option>
+            <option value="نوفمبر">نوفمبر</option>
+            <option value="ديسمبر">ديسمبر</option>
+          </select>
+          <input type="submit" value="regist" class="btn btn-lg btn-dark">
+        </form>
+      </div>
+      
+      <div class="col-lg-6 col-sm-5">
+        <img src="img/Picsart_23-08-10_20-07-19-058.png" alt="..." class="earth">
+      </div>
+    </div>
+    <div class="container">
+      <a href="main-pay" class="btn btn-lg btn-dark">Back</a>
+    </div>
+  </section>
+</body>
+</html>
