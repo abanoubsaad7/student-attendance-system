@@ -278,17 +278,6 @@ app.get('/update-three', (req, res) => {
     })
   })
 
-  // app.get('/all-student-report/:studentID', (req, res) => {
-  //   let studentID = req.params.studentID;
-  //   User.findById(studentID).then((student)=>{
-  //     Attendance.find({userID:studentID}).then((allAttendance)=>{
-  //       Exam.find({studentID:studentID}).then((allExams)=>{
-  //         res.render('student-report',{objstudent:student,arrAllAttendance:allAttendance,arrAllExams:allExams})
-  //       })
-  //     })
-  //   })
-  // })
-
   app.get('/all-student-report/:studentID', (req, res) => {
     let studentID = req.params.studentID;
     User.findById(studentID)
