@@ -1,7 +1,7 @@
 /* Define styles for printing */
 @media print {
   /* Hide unnecessary elements */
-  #printButton {
+  #printButton,button,input {
     display: none;
   }
 }
