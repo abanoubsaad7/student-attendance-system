@@ -8,5 +8,26 @@
     "mongodb": "^5.7.0",
     "mongoose": "^7.4.2",
     "nodemon": "^3.0.1"
-  }
+  },
+  "name": "geo-attendance-sys",
+  "version": "1.0.0",
+  "description": "system to manage students attendance",
+  "main": "app.js",
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/abanoubsaad7/student-attendance-system.git"
+  },
+  "keywords": [
+    "attendance"
+  ],
+  "author": "Abanoub Saad",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/abanoubsaad7/student-attendance-system/issues"
+  },
+  "homepage": "https://github.com/abanoubsaad7/student-attendance-system#readme"
 }
