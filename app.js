@@ -158,6 +158,11 @@ mongoose
       $gte:startOfDay,
       $lt:endOfDay
     }})
+      // Adjust the time by adding 2 hours to each attendance record
+  attendance.forEach(record => {
+    record.date.setHours(record.date.getHours() + 2);
+  });
+  
     console.log('attendance :>> ', attendance);
     req.session.attendance = attendance; // Store the attendance data in the session
     res.redirect('/reports')
