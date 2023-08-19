@@ -206,11 +206,11 @@ app.post('/report', async (req, res) => {
   });
 
   console.log('formattedAttendance:', formattedAttendance);
-  req.session.attendance = formattedAttendance; // Store the formatted attendance data in the session
+  req.session.formattedAttendance= formattedAttendance; // Store the formatted attendance data in the session
   res.redirect('/reports');
 });
   app.get('/reports', async(req, res) => {
-    const attendance = req.session.attendance; // Retrieve the attendance data from the session
+    const formattedAttendance = req.session.formattedAttendance; // Retrieve the attendance data from the session
     let studentList = []
     let attDate =[]
     for (let i=0  ; i<attendance.length; i++){
