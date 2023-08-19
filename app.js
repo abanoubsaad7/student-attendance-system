@@ -145,7 +145,7 @@ mongoose
     res.render('report')
   })
 
-  /* app.post('/report', async (req, res)=> {
+  app.post('/report', async (req, res)=> {
     let selectedDate = new Date(req.body.day)
     let selectedDay =selectedDate.getDate();
     let selectedMonth = selectedDate.getMonth();
@@ -166,51 +166,11 @@ mongoose
     console.log('attendance :>> ', attendance);
     req.session.attendance = attendance; // Store the attendance data in the session
     res.redirect('/reports')
-  }) */
+  }) 
 
 
-app.post('/report', async (req, res) => {
-  let selectedDate = new Date(req.body.day);
-  let selectedDay = selectedDate.getDate();
-  let selectedMonth = selectedDate.getMonth();
-  let selectedYear = selectedDate.getFullYear();
-
-  const startOfDay = new Date(selectedYear, selectedMonth, selectedDay);
-  const endOfDay = new Date(selectedYear, selectedMonth, selectedDay + 1);
-
-  let attendance = await Attendance.find({
-    date: {
-      $gte: startOfDay,
-      $lt: endOfDay,
-    },
-  });
-
-  // Adjust the time by adding 2 hours to each attendance record
-  attendance.forEach(record => {
-    record.date.setHours(record.date.getHours() + 2);
-  });
-
-  const options = {
-    hour: 'numeric',
-    minute: 'numeric',
-    hour12: true,
-  };
-
-  // Format the time in 12-hour format (am/pm)
-  const formattedAttendance = attendance.map(record => {
-    const formattedTime = record.date.toLocaleTimeString('en-US', options);
-    return {
-      ...record.toObject(),
-      formattedTime: formattedTime,
-    };
-  });
-
-  console.log('formattedAttendance:', formattedAttendance);
-  req.session.formattedAttendance= formattedAttendance; // Store the formatted attendance data in the session
-  res.redirect('/reports');
-});
   app.get('/reports', async(req, res) => {
-    const formattedAttendance = req.session.formattedAttendance; // Retrieve the attendance data from the session
+    const attendance = req.session.attendance; // Retrieve the attendance data from the session
     let studentList = []
     let attDate =[]
     for (let i=0  ; i<attendance.length; i++){
