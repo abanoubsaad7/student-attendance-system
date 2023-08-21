@@ -169,7 +169,8 @@ mongoose
     console.log('attendance :>> ', attendance);
     req.session.attendance = attendance; // Store the attendance data in the session
     res.redirect('/reports')
-  })
+  }) 
+
 
   app.get('/reports', async(req, res) => {
     const attendance = req.session.attendance; // Retrieve the attendance data from the session
