@@ -136,6 +136,9 @@ mongoose
         attDate.push(attendance[i].date)
       }
     }
+    attDate.forEach(record => {
+      record.setHours(record.getHours() + 2);
+    });
     console.log('studentList :>> ', studentList);
     res.render('atts',{objstudent:studentList,arrAttDate:attDate})
   })
