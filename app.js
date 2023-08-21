@@ -133,12 +133,26 @@ mongoose
       })
       if (studentWasRigst){
         studentList.push(studentWasRigst)
-        attDate.push(attendance[i].date)
+        // Convert the date property to a Date object
+     const date = new Date(attendance[i].date);
+
+     // Format the date and time to 12-hour format
+     const formattedDate = date.toLocaleDateString('en-US', {
+       month: 'numeric',
+       day: 'numeric',
+       year: 'numeric'
+     });
+ 
+     const formattedTime = date.toLocaleTimeString('en-US', {
+       hour: 'numeric',
+       minute: 'numeric',
+       hour12: true
+     });
+ 
+     const formattedDateTime = `${formattedDate}   ${formattedTime}`;
+     attDate.push(formattedDateTime);
       }
     }
-    attDate.forEach(record => {
-      record.setHours(record.getHours() + 2);
-    });
     console.log('studentList :>> ', studentList);
     res.render('atts',{objstudent:studentList,arrAttDate:attDate})
   })
@@ -162,16 +176,16 @@ mongoose
       $lt:endOfDay
     }})
       // Adjust the time by adding 2 hours to each attendance record
-  attendance.forEach(record => {
-    record.date.setHours(record.date.getHours() + 2);
-  });
+  // attendance.forEach(record => {
+  //   record.date.setHours(record.date.getHours() + 2);
+  // });
   
     console.log('attendance :>> ', attendance);
     req.session.attendance = attendance; // Store the attendance data in the session
     res.redirect('/reports')
   }) 
 
-
+ 
   app.get('/reports', async(req, res) => {
     const attendance = req.session.attendance; // Retrieve the attendance data from the session
     let studentList = []
@@ -179,8 +193,25 @@ mongoose
     for (let i=0  ; i<attendance.length; i++){
       let studentWasRigst = await User.findById(attendance[i].userID)
       studentList.push(studentWasRigst)
-      attDate.push(attendance[i].date)
-    }
+     // Convert the date property to a Date object
+     const date = new Date(attendance[i].date);
+
+     // Format the date and time to 12-hour format
+     const formattedDate = date.toLocaleDateString('en-US', {
+       month: 'numeric',
+       day: 'numeric',
+       year: 'numeric'
+     });
+ 
+     const formattedTime = date.toLocaleTimeString('en-US', {
+       hour: 'numeric',
+       minute: 'numeric',
+       hour12: true
+     });
+ 
+     const formattedDateTime = `${formattedDate}   ${formattedTime}`;
+     attDate.push(formattedDateTime);
+    } 
     console.log('studentList :>> ', studentList);
     console.log('attDate :>> ', attDate);
     
