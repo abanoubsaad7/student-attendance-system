@@ -135,7 +135,8 @@ mongoose
         studentList.push(studentWasRigst)
         // Convert the date property to a Date object
      const date = new Date(attendance[i].date);
-
+        // Add 1 hour to the date
+    date.setHours(date.getHours() + 2);
      // Format the date and time to 12-hour format
      const formattedDate = date.toLocaleDateString('en-US', {
        month: 'numeric',
@@ -196,6 +197,8 @@ mongoose
      // Convert the date property to a Date object
      const date = new Date(attendance[i].date);
 
+     // Add 1 hour to the date
+    date.setHours(date.getHours() + 2);
      // Format the date and time to 12-hour format
      const formattedDate = date.toLocaleDateString('en-US', {
        month: 'numeric',
