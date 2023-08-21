@@ -137,12 +137,12 @@ mongoose
      const date = new Date(attendance[i].date);
         // Add 1 hour to the date
     date.setHours(date.getHours() + 2);
-     // Format the date and time to 12-hour format
-     const formattedDate = date.toLocaleDateString('en-US', {
-      day: 'numeric',
-      month: 'numeric',
-       year: 'numeric'
-     });
+     // Format the date as dd/mm/yyyy
+    const day = date.getDate().toString().padStart(2, '0');
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const year = date.getFullYear().toString();
+
+    const formattedDate = `${year}/${month}/${day}`;
  
      const formattedTime = date.toLocaleTimeString('en-US', {
        hour: 'numeric',
@@ -199,13 +199,13 @@ mongoose
 
      // Add 1 hour to the date
     date.setHours(date.getHours() + 2);
-     // Format the date and time to 12-hour format
-     const formattedDate = date.toLocaleDateString('en-US', {
-      day: 'numeric',
-      month: 'numeric',
-       year: 'numeric'
-     });
- 
+    // Format the date as dd/mm/yyyy
+    const day = date.getDate().toString().padStart(2, '0');
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const year = date.getFullYear().toString();
+
+    const formattedDate = `${year}/${month}/${day}`;
+
      const formattedTime = date.toLocaleTimeString('en-US', {
        hour: 'numeric',
        minute: 'numeric',
