@@ -139,8 +139,8 @@ mongoose
     date.setHours(date.getHours() + 2);
      // Format the date and time to 12-hour format
      const formattedDate = date.toLocaleDateString('en-US', {
-       month: 'numeric',
-       day: 'numeric',
+      day: 'numeric',
+      month: 'numeric',
        year: 'numeric'
      });
  
@@ -201,8 +201,8 @@ mongoose
     date.setHours(date.getHours() + 2);
      // Format the date and time to 12-hour format
      const formattedDate = date.toLocaleDateString('en-US', {
-       month: 'numeric',
-       day: 'numeric',
+      day: 'numeric',
+      month: 'numeric',
        year: 'numeric'
      });
  
