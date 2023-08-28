@@ -13,6 +13,7 @@ app.use(
   })
 );
 
+
 app.set("view engine", "ejs");
 app.use(express.static("public"));
 app.use(express.urlencoded({ extended: true }));
@@ -39,20 +40,40 @@ mongoose
     console.log(err);
   });
 
+function loginMiddleware(req, res, next) {
+  // Check if the user is logged in
+  let verfiyLogIn = req.session.loggedIn;
+  console.log('verfiyLogIn :>> ', verfiyLogIn);
+  if (verfiyLogIn) {
+    // User is logged in, proceed to the next middleware or route handler
+    next();
+  } else {
+    // User is not logged in, redirect to the login page
+    res.redirect('/');
+  }
+}
+
 app.get("/", (req, res) => {
   res.render("index1");
 });
 //login page
 app.post("/admin", function (req, res) {
-  if (req.body.pass === "1234") {
-    res.redirect("/index");
+ if (req.body.pass === '1234') {
+    req.session.loggedIn = true; // Set the loggedIn property in session
+    res.redirect('/index');
+  } else {
+    res.redirect('/');
   }
+  app.post('/exit',(req,res)=>{
+    req.session.loggedIn = false;
+    res.redirect('/')
+  })
 });
-app.get("/index", (req, res) => {
+app.get("/index",loginMiddleware, (req, res) => {
   res.render("index");
 });
 
-app.get("/add-student", (req, res) => {
+app.get("/add-student",loginMiddleware,(req, res) => {
   res.render("add-student");
 });
 
@@ -65,7 +86,7 @@ app.post("/user", function (req, res) {
 });
 
 //attendance regist
-app.get("/attendance", (req, res) => {
+app.get("/attendance",loginMiddleware, (req, res) => {
   res.render("att");
 });
 
@@ -98,7 +119,7 @@ app.post("/attendance", async (req, res) => {
   }
 });
 
-app.get("/attendances", async (req, res) => {
+app.get("/attendances",loginMiddleware, async (req, res) => {
   const currentDate = new Date(); // Retrieve the current date
   const currentDay = currentDate.getDate(); // Get the current day
   const currentMonth = currentDate.getMonth(); // Get the current month
@@ -157,7 +178,7 @@ app.get("/attendances", async (req, res) => {
 });
 
 //attendance reports
-app.get("/report", (req, res) => {
+app.get("/report",loginMiddleware, (req, res) => {
   res.render("report");
 });
 
@@ -186,7 +207,7 @@ app.post("/report", async (req, res) => {
   res.redirect("/reports");
 });
 
-app.get("/reports", async (req, res) => {
+app.get("/reports",loginMiddleware, async (req, res) => {
   const attendance = req.session.attendance; // Retrieve the attendance data from the session
   let studentList = [];
   let attDate = [];
@@ -221,34 +242,34 @@ app.get("/reports", async (req, res) => {
 });
 
 //update
-app.get("/main-update", (req, res) => {
+app.get("/main-update",loginMiddleware, (req, res) => {
   res.render("main-update");
 });
-app.get("/all-update", (req, res) => {
+app.get("/all-update",loginMiddleware, (req, res) => {
   User.find().then((student) => {
     res.render("all-update", { arrstudent: student });
   });
 });
 
-app.get("/update-one", (req, res) => {
+app.get("/update-one",loginMiddleware, (req, res) => {
   User.find({ level: 1 }).then((student) => {
     res.render("one-update", { arrstudent: student });
   });
 });
 
-app.get("/update-two", (req, res) => {
+app.get("/update-two",loginMiddleware, (req, res) => {
   User.find({ level: 2 }).then((student) => {
     res.render("two-update", { arrstudent: student });
   });
 });
 
-app.get("/update-three", (req, res) => {
+app.get("/update-three",loginMiddleware, (req, res) => {
   User.find({ level: 3 }).then((student) => {
     res.render("three-update", { arrstudent: student });
   });
 });
 
-app.get("/update/:id", (req, res) => {
+app.get("/update/:id",loginMiddleware, (req, res) => {
   User.findById(req.params.id)
     .then((result) => {
       console.log("student :>> ", result);
@@ -266,35 +287,35 @@ app.post("/update/:id", function (req, res) {
 });
 
 //delete requests
-app.get("/main-delete", (req, res) => {
+app.get("/main-delete",loginMiddleware, (req, res) => {
   res.render("main-delete");
 });
 
-app.get("/all-delete", (req, res) => {
+app.get("/all-delete",loginMiddleware, (req, res) => {
   User.find().then((student) => {
     res.render("all-delete", { arrstudent: student });
   });
 });
 
-app.get("/delete-one", (req, res) => {
+app.get("/delete-one",loginMiddleware, (req, res) => {
   User.find({ level: 1 }).then((student) => {
     res.render("one-delete", { arrstudent: student });
   });
 });
 
-app.get("/delete-two", (req, res) => {
+app.get("/delete-two",loginMiddleware, (req, res) => {
   User.find({ level: 2 }).then((student) => {
     res.render("two-delete", { arrstudent: student });
   });
 });
 
-app.get("/delete-three", (req, res) => {
+app.get("/delete-three",loginMiddleware, (req, res) => {
   User.find({ level: 3 }).then((student) => {
     res.render("three-delete", { arrstudent: student });
   });
 });
 
-app.get("/delete/:id", (req, res) => {
+app.get("/delete/:id",loginMiddleware, (req, res) => {
   User.findById(req.params.id)
     .then((result) => {
       console.log("student :>> ", result);
@@ -305,7 +326,7 @@ app.get("/delete/:id", (req, res) => {
     });
 });
 
-app.delete("/delete/:id", function (req, res) {
+app.delete("/delete/:id",loginMiddleware, function (req, res) {
   let studentID = req.params.id;
   User.findByIdAndDelete(studentID).then((student) => {
     Attendance.deleteMany({ userID: studentID }).then((result) => {
@@ -319,13 +340,13 @@ app.delete("/delete/:id", function (req, res) {
 });
 
 //student reports
-app.get("/all-student-report", (req, res) => {
+app.get("/all-student-report",loginMiddleware, (req, res) => {
   User.find().then((allStudents) => {
     res.render("all-student-report", { arrstudent: allStudents });
   });
 });
 
-app.get("/all-student-report/:studentID", (req, res) => {
+app.get("/all-student-report/:studentID",loginMiddleware, (req, res) => {
   let studentID = req.params.studentID;
   User.findById(studentID)
     .then((student) => {
@@ -393,15 +414,15 @@ app.get("/all-student-report/:studentID", (req, res) => {
 
 //Student Pay for month
 
-app.get("/main-pay", (req, res) => {
+app.get("/main-pay",loginMiddleware, (req, res) => {
   res.render("main-pay");
 });
 
-app.get("/pay", (req, res) => {
+app.get("/pay",loginMiddleware, (req, res) => {
   res.render("pay");
 });
 
-app.post("/pay", async (req, res) => {
+app.post("/pay",loginMiddleware, async (req, res) => {
   let studentPay = await User.findOne({ code: req.body.code });
   if (studentPay) {
     const payed = new Pay({
@@ -416,7 +437,7 @@ app.post("/pay", async (req, res) => {
 });
 
 //pay report
-app.get("/pay-report", (req, res) => {
+app.get("/pay-report",loginMiddleware, (req, res) => {
   res.render("pay-report");
 });
 
@@ -428,7 +449,7 @@ app.post("/pay-report", async (req, res) => {
   res.redirect("/pay-reports");
 });
 
-app.get("/pay-reports", async (req, res) => {
+app.get("/pay-reports",loginMiddleware, async (req, res) => {
   const studentsPayBySelectedMonth = req.session.studentsPayBySelectedMonth;
   let studentList = [];
   for (let i = 0; i < studentsPayBySelectedMonth.length; i++) {
@@ -447,34 +468,34 @@ app.get("/pay-reports", async (req, res) => {
 });
 
 //exams
-app.get("/main-exam", (req, res) => {
+app.get("/main-exam",loginMiddleware, (req, res) => {
   res.render("main-exam");
 });
-app.get("/all-studentlist-for-exam", (req, res) => {
+app.get("/all-studentlist-for-exam",loginMiddleware, (req, res) => {
   User.find().then((students) => {
     res.render("studentList-Exam", { arrstudent: students });
   });
 });
 
-app.get("/exam-one", (req, res) => {
+app.get("/exam-one",loginMiddleware, (req, res) => {
   User.find({ level: 1 }).then((student) => {
     res.render("one-exam", { arrstudent: student });
   });
 });
 
-app.get("/exam-two", (req, res) => {
+app.get("/exam-two",loginMiddleware, (req, res) => {
   User.find({ level: 2 }).then((student) => {
     res.render("two-exam", { arrstudent: student });
   });
 });
 
-app.get("/exam-three", (req, res) => {
+app.get("/exam-three",loginMiddleware, (req, res) => {
   User.find({ level: 3 }).then((student) => {
     res.render("three-exam", { arrstudent: student });
   });
 });
 
-app.get("/all-studentlist-for-exam/:studentID", (req, res) => {
+app.get("/all-studentlist-for-exam/:studentID",loginMiddleware, (req, res) => {
   User.findById(req.params.studentID).then((student) => {
     res.render("add-exam", { objstudent: student });
   });
