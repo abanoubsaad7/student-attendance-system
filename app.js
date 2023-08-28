@@ -45,7 +45,7 @@ function loginMiddleware(req, res, next) {
   let verfiyLogIn = req.session.loggedIn;
   console.log('verfiyLogIn :>> ', verfiyLogIn);
   if (verfiyLogIn) {
-    // User is logged in, proceed to the next middleware or route handler
+    // User is logged in, proceed to the next middleware
     next();
   } else {
     // User is not logged in, redirect to the login page
