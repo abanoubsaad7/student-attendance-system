@@ -39,3 +39,6 @@ hr{
 ::-webkit-input-placeholder,td,thead{
   text-align: center;
 }
+.report{
+  overflow: auto;
+}
