@@ -16,7 +16,8 @@ router.use(
     saveUninitialized: true,
   })
 );
-
+// Middleware to parse JSON request bodies
+router.use(express.json());
 //attendance regist
 router.get("/attendance", (req, res) => {
   res.render("att");
@@ -30,9 +31,10 @@ router.post("/attendance", async (req, res) => {
 
   const startOfDay = new Date(currentYear, currentMonth, currentDay);
   const endOfDay = new Date(currentYear, currentMonth, currentDay + 1);
-
+console.log('req.body.code before :>> ', req.body.code);
   let studentAtt = await User.findOne({ code: req.body.code });
-  console.log(studentAtt);
+  console.log('req.body.code after :>> ', req.body.code);
+  console.log('studentAtt >>',studentAtt);
   if (studentAtt) {
     // Check if the student's attendance for today already exists
     const existingAttendance = await Attendance.findOne({
@@ -43,11 +45,13 @@ router.post("/attendance", async (req, res) => {
       const attendanceRecord = new Attendance({ userID: studentAtt._id });
       await attendanceRecord.save();
       req.session.studentAtt = studentAtt;
-      res.redirect("/attendances");
-    } else {
+      res.json({ redirectTo: '/attendances' });
+    }else {
       // Attendance already recorded for this student
-      res.send("Attendance already recorded for this student today.");
+      res.json({ message: "تم التسجيل من قبل" });
     }
+  }else{
+    res.json({ message: " لا يوجد طالب بهذا الكود " });
   }
 });
 

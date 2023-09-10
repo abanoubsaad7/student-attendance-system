@@ -1,33 +1,83 @@
 <!DOCTYPE html>
 <html lang="en">
 <%- include('partials/head') %>
-<body>
-  <section>
-    <div class="row">
-      <form action="/attendance" method="post" >
-        <input type="text" name="code" placeholder="code"class="col-lg-3">
-        <input type="submit" value="regist" class="btn btn-lg btn-dark">
-      </form>
-    </div>
-    <div class="row">
-      <h1>
-        لم يتم التسجيل بعد
-      </h1>
-      <table class="table col-lg-6">
-        <thead>
-          <tr>
-            <th scope="col">#</th>
-            <th scope="col">First Name</th>
-            <th scope="col">Last Name</th>
-            <th scope="col">code</th>
-          </tr>
-        </thead>
-      </table>
-    </div>
-    <div class="container">
-      <a href="index" class="btn btn-lg btn-dark">Back</a>
-    </div>
-    <%- include('partials/exit.ejs') %>
-  </section>
-</body>
+
+  <body>
+    <section>
+      <div class="row">
+        <form action="/attendance" method="post">
+          <input type="text" name="code" placeholder="code" class="col-lg-3" autofocus onchange="submitBarcode()">
+          <!-- <input type="submit" value="regist" class="btn btn-lg btn-dark"> -->
+        </form>
+      </div>
+      <div class="row">
+        <h1 id="message-container">
+          لم يتم التسجيل بعد
+        </h1>
+        <table class="table col-lg-6">
+          <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">First Name</th>
+              <th scope="col">Last Name</th>
+              <th scope="col">code</th>
+            </tr>
+          </thead>
+        </table>
+      </div>
+      <div class="container">
+        <a href="index" class="btn btn-lg btn-dark">Back</a>
+      </div>
+      <%- include('partials/exit.ejs') %>
+    </section>
+    <script>
+      window.addEventListener("DOMContentLoaded", function () {
+        const codeInput = document.querySelector('input[name="code"]');
+        // codeInput.focus();
+
+        let debounceTimeoutId;
+        codeInput.addEventListener("input", function (event) {
+          clearTimeout(debounceTimeoutId);
+
+          debounceTimeoutId = setTimeout(function () {
+            const code = event.target.value;
+            if (code.trim() !== "") {
+              submitBarcode(code);
+              codeInput.value ="";
+            }
+          }, 500); // Adjust the debounce delay as needed (in milliseconds)
+        });
+      });
+
+      function submitBarcode(code) {
+        // Make the API request
+        fetch('/attendance', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ code: code })
+        })
+          .then(response => response.json())
+          .then(data => {
+            // Handle the API response
+            console.log(data);
+            if (data.message) {
+              // Display the message on the page
+              const messageContainer = document.getElementById('message-container');
+              messageContainer.textContent = data.message;
+            } else if (data.redirectTo) {
+              // Redirect to the specified URL
+              window.location.href = data.redirectTo;
+            }
+            // Redirect or display a success message based on the response
+          })
+          .catch(error => {
+            // Handle any errors
+            console.error(error);
+          });
+      }
+    </script>
+  </body>
+
 </html>
