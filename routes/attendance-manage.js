@@ -18,7 +18,11 @@ router.use(
 );
 // Middleware to parse JSON request bodies
 router.use(express.json());
+//attendance regist
 
+router.get('/attendance', (req, res) => {
+  res.render('att')
+})
 
 router.post("/attendance", async (req, res) => {
   const currentDate = new Date(); // Retrieve the current date
@@ -28,6 +32,8 @@ router.post("/attendance", async (req, res) => {
 
   const startOfDay = new Date(currentYear, currentMonth, currentDay);
   const endOfDay = new Date(currentYear, currentMonth, currentDay + 1);
+  let msg = 'قم بالتسجيل من فضلك';
+  
 console.log('req.body.code before :>> ', req.body.code);
   let studentAtt = await User.findOne({ code: req.body.code });
   console.log('req.body.code after :>> ', req.body.code);
@@ -42,13 +48,18 @@ console.log('req.body.code before :>> ', req.body.code);
       const attendanceRecord = new Attendance({ userID: studentAtt._id });
       await attendanceRecord.save();
       req.session.studentAtt = studentAtt;
-      res.json({ redirectTo: '/attendances' });
+      req.session.msg = msg;
+      res.redirect('/attendances')
     }else {
       // Attendance already recorded for this student
-      res.json({ message: "تم التسجيل من قبل" });
+      msg = 'تم التسجيل بالفعل من قبل'
+      req.session.msg = msg;
+      res.redirect('/attendances')
     }
   }else{
-    res.json({ message: " لا يوجد طالب بهذا الكود " });
+    msg = 'لا يوجد طالب بهذا الكود'
+    req.session.msg = msg;
+    res.redirect('/attendances')
   }
 });
 
@@ -62,11 +73,7 @@ router.get("/attendances", async (req, res) => {
   const endOfDay = new Date(currentYear, currentMonth, currentDay + 1);
 
   const studentAtt = req.session.studentAtt;
-
-  if (!studentAtt){
-    return res.render("atts", { objstudent: [], arrAttDate: [] }); // Provide default empty arrays
-  }
-
+  let msg = req.session.msg;
   // Find attendance records that fall within the current day
   const attendance = await Attendance.find({
     date: {
@@ -104,15 +111,14 @@ router.get("/attendances", async (req, res) => {
         hour: "numeric",
         minute: "numeric",
         hour12: true,
-      });
+      }); 
 
       const formattedDateTime = `${formattedDate}   ${formattedTime}`;
       attDate.push(formattedDateTime);
     }
   }
-  
   console.log("studentList :>> ", studentList);
-  res.render("atts", { objstudent: studentList, arrAttDate: attDate });
+  res.render("atts", { objstudent: studentList, arrAttDate: attDate ,msg:msg});
 });
 
 

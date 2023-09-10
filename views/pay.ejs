@@ -5,6 +5,9 @@
   <section>
     <div class="row">
       <div class="col-lg-5">
+        <h1>
+          حدد الشهر اولاً من فضلك
+        </h1>
         <form action="/pay" method="post" >
           <input type="text" name="code" placeholder="code"class="col-lg-3">
           <br><br>
@@ -25,16 +28,16 @@
           </select>
           <input type="submit" value="regist" class="btn btn-lg btn-dark">
         </form>
+        <div class="container">
+          <a href="main-pay" class="btn btn-lg btn-dark">Back</a>
+        </div>
+        <%- include('partials/exit.ejs') %>
       </div>
       
       <div class="col-lg-6 col-sm-5">
         <img src="img/Picsart_23-08-10_20-07-19-058.png" alt="..." class="earth">
       </div>
     </div>
-    <div class="container">
-      <a href="main-pay" class="btn btn-lg btn-dark">Back</a>
-    </div>
-    <%- include('partials/exit.ejs') %>
   </section>
 </body>
 </html>

@@ -11,8 +11,6 @@
     <input type="text" name="phone" placeholder="phone" value="<%= objstudent.phone %>"><br><br>
     <label for="level">level</label>
     <input type="number" name="level" placeholder="level" value="<%= objstudent.level %>"><br><br>
-    <label for="code">Code</label>
-    <input type="text" name="code" placeholder="code" value="<%= objstudent.code %>"><br><br>
     <label for="group">group type</label>
     <select name="groupType">
       <option value="<%= objstudent.groupType %>"><%= objstudent.groupType %></option>
@@ -49,7 +47,9 @@
     <input type="text" name="endHour" value="<%= objstudent.endHour %>">
     <br><br>
     <label>اسم السنتر</label>
-    <input type="text" name="place" value="<%= objstudent.place %>">
+    <input type="text" name="place" value="<%= objstudent.place %>"><br><br>
+    <label for="code">Code</label>
+    <input type="text" name="code" placeholder="code" value="<%= objstudent.code %>">
     <br><hr>
     
     <input type="submit" value="edit" class="btn btn-lg btn-dark">
