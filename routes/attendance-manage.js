@@ -18,10 +18,7 @@ router.use(
 );
 // Middleware to parse JSON request bodies
 router.use(express.json());
-//attendance regist
-router.get("/attendance", (req, res) => {
-  res.render("att");
-});
+
 
 router.post("/attendance", async (req, res) => {
   const currentDate = new Date(); // Retrieve the current date
@@ -66,6 +63,10 @@ router.get("/attendances", async (req, res) => {
 
   const studentAtt = req.session.studentAtt;
 
+  if (!studentAtt){
+    return res.render("atts", { objstudent: [], arrAttDate: [] }); // Provide default empty arrays
+  }
+
   // Find attendance records that fall within the current day
   const attendance = await Attendance.find({
     date: {
@@ -109,6 +110,7 @@ router.get("/attendances", async (req, res) => {
       attDate.push(formattedDateTime);
     }
   }
+  
   console.log("studentList :>> ", studentList);
   res.render("atts", { objstudent: studentList, arrAttDate: attDate });
 });
